@@ -175,11 +175,12 @@ button:active {
         <div class="error"><?php echo htmlspecialchars($error); ?></div>
     <?php endif; ?>
     
-<form method="POST">
-<input name="email" placeholder="johndoe@gmail.com" required>
-<input name="password" type="password" placeholder="Password" required>
-<button>Login</button>
-</form>
+    <form method="POST">
+        <input name="email" placeholder="johndoe@gmail.com" required>
+        <input name="password" type="password" placeholder="Password" required>
+        <button>Login</button>
+    </form>
+    
     <div class="switch">
         New here? <a href="register.php">Sign up</a>
     </div>

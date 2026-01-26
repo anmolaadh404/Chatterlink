@@ -55,28 +55,34 @@ if (!$r) {
         }
         
         body, html { 
-            height: 100%; 
+            height: 100vh; 
             margin: 0;
+            padding: 0;
             background: #f5f7fa;
+            overflow: hidden;
         }
         
         .chat-container {
             display: flex;
             flex-direction: column;
             height: 100vh;
-            max-width: 800px;
-            margin: 0 auto;
+            width: 100%;
+            max-width: 100%;
+            margin: 0;
+            padding: 0;
             background: white;
         }
 
         .header {
-            padding: 16px 24px;
+            padding: 12px 16px;
             background: white;
             border-bottom: 1px solid #e1e8ed;
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: 12px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            flex-shrink: 0;
+            min-height: 60px;
         }
 
         .header a {
@@ -84,6 +90,10 @@ if (!$r) {
             font-size: 20px;
             color: #0984e3;
             transition: color 0.3s ease;
+            padding: 4px 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .header a:hover {
@@ -106,12 +116,31 @@ if (!$r) {
         .messages {
             flex: 1;
             overflow-y: auto;
-            padding: 20px 24px;
+            overflow-x: hidden;
+            padding: 16px;
             display: flex;
             flex-direction: column;
             gap: 8px;
             background-color: #f5f7fa;
             position: relative;
+            min-height: 0;
+        }
+        
+        .messages::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .messages::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        
+        .messages::-webkit-scrollbar-thumb {
+            background: #d0d7de;
+            border-radius: 3px;
+        }
+        
+        .messages::-webkit-scrollbar-thumb:hover {
+            background: #b4bcc3;
         }
 
         .empty-state {
@@ -156,18 +185,20 @@ if (!$r) {
         .them-row { justify-content: flex-start; }
 
         .msg {
-            max-width: 70%;
-            padding: 10px 16px;
+            max-width: 75%;
+            padding: 10px 14px;
             border-radius: 12px;
             font-size: 14px;
             position: relative;
             line-height: 1.5;
             word-wrap: break-word;
+            overflow-wrap: break-word;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
         }
 
         .msg img {
             max-width: 100%;
+            max-height: 300px;
             border-radius: 8px;
             margin-bottom: 8px;
         }
@@ -181,25 +212,164 @@ if (!$r) {
             background: #cee8f8ff;
             color: #2d3436;
         }
+        
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .header {
+                padding: 10px 12px;
+                min-height: 54px;
+            }
+            
+            .header-name {
+                font-size: 15px;
+            }
+            
+            .header-username {
+                font-size: 12px;
+            }
+            
+            .messages {
+                padding: 12px;
+                gap: 6px;
+            }
+            
+            .msg {
+                max-width: 80%;
+                padding: 8px 12px;
+                font-size: 13px;
+            }
+            
+            .input-area {
+                padding: 10px;
+                min-height: 54px;
+                gap: 6px;
+            }
+            
+            .input-area input[type="text"],
+            .input-area button {
+                padding: 9px 12px;
+                font-size: 13px;
+            }
+            
+            .photo-btn {
+                width: 36px;
+                height: 36px;
+                font-size: 16px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .header {
+                padding: 8px 10px;
+                min-height: 50px;
+                gap: 8px;
+            }
+            
+            .header a {
+                font-size: 18px;
+                padding: 4px 6px;
+            }
+            
+            .header-name {
+                font-size: 14px;
+            }
+            
+            .header-username {
+                font-size: 11px;
+            }
+            
+            .messages {
+                padding: 10px;
+                gap: 4px;
+            }
+            
+            .msg {
+                max-width: 85%;
+                padding: 8px 11px;
+                font-size: 12px;
+            }
+            
+            .msg img {
+                max-height: 250px;
+            }
+            
+            .empty-state-title {
+                font-size: 18px;
+            }
+            
+            .empty-state-message {
+                font-size: 13px;
+            }
+            
+            .input-area {
+                padding: 8px;
+                min-height: 50px;
+                gap: 4px;
+            }
+            
+            .input-area input[type="text"],
+            .input-area button {
+                padding: 8px 10px;
+                font-size: 12px;
+            }
+            
+            .photo-btn {
+                width: 32px;
+                height: 32px;
+                font-size: 14px;
+            }
+            
+            .input-area button {
+                padding: 8px 12px;
+            }
+            
+            .actions {
+                font-size: 11px;
+            }
+        }
+        
+        /* Large screens */
+        @media (min-width: 1024px) {
+            .msg {
+                max-width: 65%;
+            }
+            
+            .header {
+                padding: 14px 20px;
+            }
+            
+            .messages {
+                padding: 18px 20px;
+            }
+            
+            .input-area {
+                padding: 14px 20px;
+            }
+        }
 
         .input-area {
-            padding: 16px 24px;
+            padding: 12px;
             background: white;
             border-top: 1px solid #e1e8ed;
             display: flex;
-            gap: 12px;
-            align-items: center;
+            gap: 8px;
+            align-items: flex-end;
+            flex-shrink: 0;
+            min-height: 60px;
+            box-sizing: border-box;
         }
 
         .input-wrapper {
             flex: 1;
             display: flex;
-            gap: 8px;
+            gap: 6px;
             align-items: center;
+            min-width: 0;
         }
 
         .file-input-wrapper {
             position: relative;
+            flex-shrink: 0;
         }
 
         #photoInput {
@@ -210,7 +380,7 @@ if (!$r) {
             background: #f0f0f0;
             color: #636e72;
             border: none;
-            padding: 10px 14px;
+            padding: 8px;
             border-radius: 8px;
             cursor: pointer;
             font-size: 18px;
@@ -220,6 +390,7 @@ if (!$r) {
             justify-content: center;
             width: 40px;
             height: 40px;
+            flex-shrink: 0;
         }
 
         .photo-btn:hover {
@@ -233,7 +404,7 @@ if (!$r) {
 
         .input-area input[type="text"] {
             flex: 1;
-            padding: 11px 16px;
+            padding: 10px 14px;
             border: 1.5px solid #dfe6e9;
             border-radius: 10px;
             outline: none;
@@ -241,6 +412,7 @@ if (!$r) {
             color: #2d3436;
             font-size: 14px;
             transition: all 0.3s ease;
+            min-width: 0;
         }
         
         .input-area input[type="text"]:focus {
@@ -248,17 +420,23 @@ if (!$r) {
             background: white;
             box-shadow: 0 0 0 3px rgba(9, 132, 227, 0.1);
         }
+        
+        .input-area input[type="text"]::placeholder {
+            color: #b2bec3;
+        }
 
         .input-area button {
             background: linear-gradient(135deg, #0984e3 0%, #0770d1 100%);
             color: white;
             border: none;
-            padding: 11px 24px;
+            padding: 10px 16px;
             border-radius: 10px;
             font-weight: 600;
             font-size: 14px;
             cursor: pointer;
             transition: all 0.3s ease;
+            white-space: nowrap;
+            flex-shrink: 0;
         }
 
         .input-area button:hover { 
@@ -313,20 +491,137 @@ if (!$r) {
             background: rgba(255, 255, 255, 0.5);
         }
         
-        @media (max-width: 600px) {
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .header {
+                padding: 10px 12px;
+                min-height: 54px;
+            }
+            
+            .header-name {
+                font-size: 15px;
+            }
+            
+            .header-username {
+                font-size: 12px;
+            }
+            
+            .messages {
+                padding: 12px;
+                gap: 6px;
+            }
+            
             .msg {
-                max-width: 85%;
+                max-width: 80%;
+                padding: 8px 12px;
+                font-size: 13px;
             }
             
             .input-area {
-                padding: 12px 16px;
+                padding: 10px;
+                min-height: 54px;
+                gap: 6px;
+            }
+            
+            .input-area input[type="text"],
+            .input-area button {
+                padding: 9px 12px;
+                font-size: 13px;
+            }
+            
+            .photo-btn {
+                width: 36px;
+                height: 36px;
+                font-size: 16px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .header {
+                padding: 8px 10px;
+                min-height: 50px;
                 gap: 8px;
             }
             
-            .input-area input,
-            .input-area button {
-                padding: 10px 14px;
+            .header a {
+                font-size: 18px;
+                padding: 4px 6px;
+            }
+            
+            .header-name {
+                font-size: 14px;
+            }
+            
+            .header-username {
+                font-size: 11px;
+            }
+            
+            .messages {
+                padding: 10px;
+                gap: 4px;
+            }
+            
+            .msg {
+                max-width: 85%;
+                padding: 8px 11px;
+                font-size: 12px;
+            }
+            
+            .msg img {
+                max-height: 250px;
+            }
+            
+            .empty-state-title {
+                font-size: 18px;
+            }
+            
+            .empty-state-message {
                 font-size: 13px;
+            }
+            
+            .input-area {
+                padding: 8px;
+                min-height: 50px;
+                gap: 4px;
+            }
+            
+            .input-area input[type="text"],
+            .input-area button {
+                padding: 8px 10px;
+                font-size: 12px;
+            }
+            
+            .photo-btn {
+                width: 32px;
+                height: 32px;
+                font-size: 14px;
+            }
+            
+            .input-area button {
+                padding: 8px 12px;
+            }
+            
+            .actions {
+                font-size: 11px;
+            }
+        }
+        
+        /* Large screens */
+        @media (min-width: 1024px) {
+            .msg {
+                max-width: 65%;
+            }
+            
+            .header {
+                padding: 14px 20px;
+            }
+            
+            .messages {
+                padding: 18px 20px;
+            }
+            
+            .input-area {
+                padding: 14px 20px;
             }
         }
     </style>
