@@ -17,21 +17,7 @@ php -S localhost:8000
 http://localhost:8000
 ```
 
----
 
-## 📚 Documentation Map
-
-| Need | Read This |
-|------|-----------|
-| **Setup** | QUICKSTART.md |
-| **Features** | UPDATES.md |
-| **What Changed** | CHANGELOG.md |
-| **Troubleshooting** | TROUBLESHOOTING.md |
-| **File Structure** | FILE_INVENTORY.md |
-| **Complete Summary** | DELIVERY_SUMMARY.md |
-| **Database** | database-schema.sql |
-
----
 
 ## 🔑 Key Endpoints
 
