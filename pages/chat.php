@@ -632,8 +632,10 @@ if (!$r) {
     <div class="header">
         <a href="/Chatterlink/users.php">←</a>
         <div>
-            <div><?php echo htmlspecialchars($r['name']); ?></div>
-            <div class="header-username">@<?php echo htmlspecialchars($r['username']); ?></div>
+            <a href="/Chatterlink/pages/profiles.php?user_id=<?php echo $receiver; ?>" style="text-decoration:none;color:inherit;">
+                <div><?php echo htmlspecialchars($r['name']); ?></div>
+                <div class="header-username">@<?php echo htmlspecialchars($r['username']); ?></div>
+            </a>
         </div>
     </div>
 
