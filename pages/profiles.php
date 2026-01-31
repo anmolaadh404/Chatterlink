@@ -173,6 +173,72 @@ if ($is_own_profile && $_SERVER['REQUEST_METHOD'] === 'POST') {
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             overflow: hidden;
         }
+
+        /* Card-style profile (cover image + overlay) */
+        .profile-card {
+            width: 100%;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #fff;
+        }
+
+        .card-media {
+            position: relative;
+            width: 100%;
+            height: 320px;
+            background: #e9ecef;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+        }
+
+        .card-image {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .card-image-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, #f0f0f0 0%, #dfe6e9 100%);
+        }
+
+        .card-overlay {
+            position: relative;
+            width: 100%;
+            padding: 18px 20px;
+            background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.6) 100%);
+            color: #fff;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .card-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #ffffff;
+            margin: 0;
+        }
+
+        .card-sub {
+            font-size: 14px;
+            color: rgba(255,255,255,0.85);
+        }
+
+        .card-joined {
+            margin-top: 8px;
+            font-size: 13px;
+            color: rgba(255,255,255,0.85);
+            align-self: flex-start;
+            background: rgba(0,0,0,0.25);
+            padding: 6px 10px;
+            border-radius: 6px;
+        }
         
         .profile-header {
             padding: 0;
@@ -438,23 +504,24 @@ if ($is_own_profile && $_SERVER['REQUEST_METHOD'] === 'POST') {
 </div>
 
 <div class="profile-container">
-    <div class="profile-header">
-        <div class="profile-header-content"></div>
-        <div class="avatar-container">
+    <div class="profile-card">
+        <div class="card-media">
             <?php if ($user['avatar']): ?>
-                <img src="<?php echo htmlspecialchars($user['avatar']); ?>" alt="Avatar" class="avatar">
+                <img src="<?php echo htmlspecialchars($user['avatar']); ?>" alt="Cover" class="card-image">
             <?php else: ?>
-                <div class="avatar-placeholder">👤</div>
+                <div class="card-image-placeholder"></div>
             <?php endif; ?>
+            <div class="card-overlay">
+                <div>
+                    <h2 class="card-title"><?php echo htmlspecialchars($user['name']); ?></h2>
+                    <div class="card-sub">@<?php echo htmlspecialchars($user['username']); ?></div>
+                </div>
+                <div class="card-joined">Joined at <?php echo date('M d, Y', strtotime($user['created_at'])); ?></div>
+            </div>
         </div>
     </div>
 
     <div class="profile-body">
-        <div class="profile-info">
-            <h1 class="profile-name"><?php echo htmlspecialchars($user['name']); ?></h1>
-            <p class="profile-username">@<?php echo htmlspecialchars($user['username']); ?></p>
-            <p class="member-since">Member since <?php echo date('M d, Y', strtotime($user['created_at'])); ?></p>
-        </div>
         <?php if (!empty($success_msg)): ?>
             <div class="success-message"><?php echo htmlspecialchars($success_msg); ?></div>
         <?php endif; ?>
