@@ -504,83 +504,50 @@ if ($is_own_profile && $_SERVER['REQUEST_METHOD'] === 'POST') {
 </div>
 
 <div class="profile-container">
-    <div class="profile-card">
-        <div class="card-media">
-            <?php if ($user['avatar']): ?>
-                <img src="<?php echo htmlspecialchars($user['avatar']); ?>" alt="Cover" class="card-image">
-            <?php else: ?>
-                <div class="card-image-placeholder"></div>
+    <div class="minimal-card">
+        <div class="card-cover">
+            <?php if (!empty($user['cover']) && $user['cover'] !== ''): ?>
+                <img src="<?php echo htmlspecialchars($user['cover']); ?>" alt="Cover" class="cover-img">
             <?php endif; ?>
-            <div class="card-overlay">
-                <div>
-                    <h2 class="card-title"><?php echo htmlspecialchars($user['name']); ?></h2>
-                    <div class="card-sub">@<?php echo htmlspecialchars($user['username']); ?></div>
-                </div>
-                <div class="card-joined">Joined at <?php echo date('M d, Y', strtotime($user['created_at'])); ?></div>
-            </div>
         </div>
-    </div>
 
-    <div class="profile-body">
-        <?php if (!empty($success_msg)): ?>
-            <div class="success-message"><?php echo htmlspecialchars($success_msg); ?></div>
-        <?php endif; ?>
-        
-        <?php if (!empty($error)): ?>
-            <div class="error-message"><?php echo htmlspecialchars($error); ?></div>
-        <?php endif; ?>
+        <div class="card-body">
+            <div class="avatar-wrap">
+                <?php if ($user['avatar']): ?>
+                    <img src="<?php echo htmlspecialchars($user['avatar']); ?>" alt="Avatar" class="avatar">
+                <?php else: ?>
+                    <div class="avatar-placeholder"><?php echo strtoupper(substr($user['name'] ?? $user['username'],0,1)); ?></div>
+                <?php endif; ?>
+            </div>
 
-        <!-- About Section -->
-        <div class="profile-section">
-            <?php if ($user['bio'] || $is_own_profile): ?>
-                <div class="section-title">About Me</div>
+            <h2 class="profile-name"><?php echo htmlspecialchars($user['name'] ?: $user['username']); ?></h2>
+            <div class="profile-username">@<?php echo htmlspecialchars($user['username']); ?></div>
+            <div class="profile-joined">Joined <?php echo date('M d, Y', strtotime($user['created_at'])); ?></div>
+
+            <p class="profile-bio">
+                <?php if (!empty($user['bio'])): ?>
+                    <?php echo nl2br(htmlspecialchars($user['bio'])); ?>
+                <?php else: ?>
+                    <span class="muted">No bio yet</span>
+                <?php endif; ?>
+            </p>
+
+            <div class="card-actions">
                 <?php if ($is_own_profile): ?>
-                    <form method="POST" class="edit-form">
-                        <input type="hidden" name="action" value="update_bio">
-                        <textarea name="bio" placeholder="Tell people about yourself..."><?php echo htmlspecialchars($user['bio'] ?? ''); ?></textarea>
-                        <button type="submit" class="btn btn-primary">Save Bio</button>
-                    </form>
+                    <a href="/Chatterlink/users.php" class="btn btn-outline">Back</a>
+                    <a href="/Chatterlink/pages/chat.php" class="btn btn-primary">My Chats</a>
                 <?php else: ?>
-                    <div class="section-content">
-                        <?php if ($user['bio']): ?>
-                            <?php echo htmlspecialchars($user['bio']); ?>
-                        <?php else: ?>
-                            <p style="color: #999; margin: 0;">No bio added yet</p>
-                        <?php endif; ?>
-                    </div>
+                    <?php if ($friend_status === 'accepted'): ?>
+                        <a href="/Chatterlink/pages/chat.php?user_id=<?php echo $view_user_id; ?>" class="btn btn-primary">Message</a>
+                        <button onclick="removeF(<?php echo $view_user_id; ?>)" class="btn btn-outline">Remove</button>
+                    <?php elseif ($friend_status === 'pending'): ?>
+                        <button disabled class="btn btn-disabled">Request Pending</button>
+                    <?php else: ?>
+                        <button onclick="addF(<?php echo $view_user_id; ?>)" class="btn btn-primary">Follow</button>
+                    <?php endif; ?>
                 <?php endif; ?>
-            <?php endif; ?>
+            </div>
         </div>
-
-        <!-- Avatar Upload Section (Own Profile Only) -->
-        <?php if ($is_own_profile): ?>
-            <div class="profile-section">
-                <div class="section-title">Profile Picture</div>
-                <form method="POST" enctype="multipart/form-data" class="edit-form">
-                    <input type="hidden" name="action" value="upload_avatar">
-                    <input type="file" name="avatar" accept="image/*" required>
-                    <button type="submit" class="btn btn-primary">Change Photo</button>
-                </form>
-            </div>
-        <?php endif; ?>
-
-        <!-- Action Buttons -->
-        <?php if (!$is_own_profile): ?>
-            <div class="btn-group">
-                <?php if ($friend_status === 'accepted'): ?>
-                    <a href="/Chatterlink/pages/chat.php?user_id=<?php echo $view_user_id; ?>" class="btn btn-primary">Message</a>
-                    <button onclick="removeF(<?php echo $view_user_id; ?>)" class="btn btn-danger">Remove</button>
-                <?php elseif ($friend_status === 'pending'): ?>
-                    <button disabled class="btn btn-secondary">Request Pending</button>
-                <?php else: ?>
-                    <button onclick="addF(<?php echo $view_user_id; ?>)" class="btn btn-primary">Follow</button>
-                <?php endif; ?>
-            </div>
-        <?php else: ?>
-            <div class="btn-group">
-                <a href="/Chatterlink/users.php" class="btn btn-secondary">Back to Users</a>
-            </div>
-        <?php endif; ?>
     </div>
 </div>
 
