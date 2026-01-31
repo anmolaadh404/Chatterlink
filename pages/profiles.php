@@ -133,366 +133,42 @@ if ($is_own_profile && $_SERVER['REQUEST_METHOD'] === 'POST') {
     <title><?php echo htmlspecialchars($user['name']); ?> - Chatterlink</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
-        * { 
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", sans-serif;
-        }
-        
-        body, html { 
-            margin: 0;
-            background: #f5f7fa;
-            color: #2d3436;
-        }
-        
-        .header {
-            padding: 16px 24px;
-            background: white;
-            border-bottom: 1px solid #e1e8ed;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-        }
-        
-        .header a {
-            font-size: 20px;
-            color: #0984e3;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-        
-        .header a:hover {
-            color: #0770d1;
-        }
-        
-        .profile-container {
-            max-width: 500px;
-            margin: 24px auto;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-        }
+        /* Minimal, focused CSS for profile card */
+        * { box-sizing: border-box; }
+        body, html { margin:0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background:#f5f7fa; color:#222; }
 
-        /* Card-style profile (cover image + overlay) */
-        .profile-card {
-            width: 100%;
-            border-radius: 12px;
-            overflow: hidden;
-            background: #fff;
-        }
+        .header { padding:12px 16px; background:#fff; border-bottom:1px solid #eceef0; display:flex; gap:12px; align-items:center; }
+        .header a { color:#0984e3; text-decoration:none; font-weight:600; }
 
-        .card-media {
-            position: relative;
-            width: 100%;
-            height: 320px;
-            background: #e9ecef;
-            display: flex;
-            align-items: flex-end;
-            justify-content: center;
-        }
+        .profile-container { max-width:520px; margin:22px auto; padding:0; }
 
-        .card-image {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+        .minimal-card { background:#fff; border-radius:10px; overflow:hidden; box-shadow:0 6px 18px rgba(20,20,20,0.08); }
 
-        .card-image-placeholder {
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(180deg, #f0f0f0 0%, #dfe6e9 100%);
-        }
+        .card-cover { height:110px; background:linear-gradient(90deg,#eef2ff,#f8fafc); display:block; }
+        .cover-img { width:100%; height:110px; object-fit:cover; display:block; }
 
-        .card-overlay {
-            position: relative;
-            width: 100%;
-            padding: 18px 20px;
-            background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.6) 100%);
-            color: #fff;
-            box-sizing: border-box;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
+        .card-body { padding:18px; text-align:center; position:relative; }
+        .avatar-wrap { position: relative; margin-top:-48px; }
+        .avatar { width:96px; height:96px; border-radius:50%; object-fit:cover; border:4px solid #fff; background:#eee; display:inline-block; }
+        .avatar-placeholder { width:96px; height:96px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; background:#6c7ae0; color:#fff; font-size:36px; border:4px solid #fff; }
 
-        .card-title {
-            font-size: 20px;
-            font-weight: 700;
-            color: #ffffff;
-            margin: 0;
-        }
+        .profile-name { margin:10px 0 4px; font-size:20px; font-weight:700; color:#111; }
+        .profile-username { font-size:13px; color:#666; margin-bottom:6px; }
+        .profile-joined { font-size:12px; color:#888; margin-bottom:12px; }
 
-        .card-sub {
-            font-size: 14px;
-            color: rgba(255,255,255,0.85);
-        }
+        .profile-bio { font-size:14px; color:#333; line-height:1.4; margin:0 0 12px; min-height:36px; }
+        .muted { color:#999; }
 
-        .card-joined {
-            margin-top: 8px;
-            font-size: 13px;
-            color: rgba(255,255,255,0.85);
-            align-self: flex-start;
-            background: rgba(0,0,0,0.25);
-            padding: 6px 10px;
-            border-radius: 6px;
-        }
-        
-        .profile-header {
-            padding: 0;
-            background: linear-gradient(135deg, #5865F2 0%, #4752C4 100%);
-            height: 120px;
-            position: relative;
-        }
-        
-        .profile-header-content {
-            position: relative;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            padding: 20px 24px 24px;
-        }
-        
-        .avatar-container {
-            position: absolute;
-            top: 60px;
-            left: 24px;
-        }
-        
-        .avatar {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 5px solid white;
-            background: #e1e8ed;
-        }
-        
-        .avatar-placeholder {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #5865F2 0%, #4752C4 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 48px;
-            border: 5px solid white;
-        }
-        
-        .profile-body {
-            padding: 60px 24px 28px;
-        }
-        
-        .profile-info {
-            margin-bottom: 28px;
-        }
-        
-        .profile-name {
-            font-size: 24px;
-            font-weight: 700;
-            margin: 0 0 4px 0;
-            color: #2d3436;
-        }
-        
-        .profile-username {
-            font-size: 14px;
-            color: #636e72;
-            margin: 0 0 12px 0;
-        }
-        
-        .member-since {
-            font-size: 13px;
-            color: #636e72;
-            margin: 0;
-            padding: 8px 0;
-        }
-        
-        .profile-section {
-            margin-bottom: 28px;
-        }
-        
-        .section-title {
-            font-weight: 700;
-            color: #2d3436;
-            margin-bottom: 12px;
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: #636e72;
-        }
-        
-        .section-content {
-            padding: 12px 16px;
-            background: #f8f9fa;
-            border-radius: 8px;
-            color: #2d3436;
-            line-height: 1.6;
-            border: 1px solid #e1e8ed;
-            font-size: 14px;
-            word-break: break-word;
-        }
-        
-        .edit-form {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        
-        .edit-form textarea {
-            width: 100%;
-            padding: 11px 12px;
-            border: 1px solid #e1e8ed;
-            border-radius: 6px;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-            resize: vertical;
-            min-height: 100px;
-            font-size: 14px;
-            color: #2d3436;
-            background: white;
-            transition: all 0.3s ease;
-        }
-        
-        .edit-form textarea:focus {
-            border-color: #5865F2;
-            outline: none;
-            box-shadow: 0 0 0 2px rgba(88, 101, 242, 0.1);
-        }
-        
-        .edit-form input[type="file"] {
-            display: block;
-            padding: 8px 0;
-            font-size: 13px;
-            color: #2d3436;
-        }
-        
-        .edit-form input[type="file"]::file-selector-button {
-            background: white;
-            border: 1px solid #e1e8ed;
-            border-radius: 6px;
-            padding: 8px 16px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 13px;
-            color: #2d3436;
-            transition: all 0.2s ease;
-        }
-        
-        .edit-form input[type="file"]::file-selector-button:hover {
-            background: #f9f9f9;
-            border-color: #5865F2;
-        }
-        
-        .btn-group {
-            display: flex;
-            gap: 12px;
-            margin-top: 28px;
-        }
-        
-        .btn {
-            flex: 1;
-            padding: 10px 18px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            text-align: center;
-            text-decoration: none;
-            font-size: 14px;
-            transition: all 0.2s ease;
-        }
-        
-        .btn-primary {
-            background: #5865F2;
-            color: white;
-        }
-        
-        .btn-primary:hover {
-            background: #4752C4;
-        }
-        
-        .btn-secondary {
-            background: #e1e8ed;
-            color: #2d3436;
-            border: 1px solid #dfe6e9;
-        }
-        
-        .btn-secondary:hover {
-            background: #dfe6e9;
-        }
-        
-        .btn-danger {
-            background: #ED4245;
-            color: white;
-        }
-        
-        .btn-danger:hover {
-            background: #DA373C;
-        }
-        
-        .success-message {
-            background: #d4edda;
-            color: #155724;
-            padding: 12px 16px;
-            border-radius: 6px;
-            margin-bottom: 16px;
-            border: 1px solid #c3e6cb;
-            font-size: 13px;
-        }
-        
-        .error-message {
-            background: #fff5f6;
-            color: #d63031;
-            padding: 12px 16px;
-            border-radius: 6px;
-            margin-bottom: 16px;
-            border: 1px solid #f5a1a5;
-            font-size: 13px;
-        }
-        
-        @media (max-width: 600px) {
-            .profile-container {
-                margin: 12px;
-                border-radius: 12px;
-            }
-            
-            .profile-header {
-                height: 100px;
-            }
-            
-            .profile-body {
-                padding: 60px 16px 20px;
-            }
-            
-            .avatar {
-                width: 80px;
-                height: 80px;
-                border-width: 4px;
-            }
-            
-            .avatar-placeholder {
-                width: 80px;
-                height: 80px;
-                font-size: 40px;
-                border-width: 4px;
-            }
-            
-            .avatar-container {
-                top: 50px;
-                left: 16px;
-            }
-            
-            .profile-name {
-                font-size: 20px;
-            }
-            
-            .btn-group {
-                flex-direction: column;
-            }
+        .card-actions { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; }
+        .btn { padding:8px 14px; border-radius:8px; border:1px solid transparent; cursor:pointer; text-decoration:none; display:inline-block; font-weight:600; font-size:14px; }
+        .btn-primary { background:#5865F2; color:#fff; }
+        .btn-outline { background:#fff; color:#5865F2; border-color:#dfe6f8; }
+        .btn-disabled { background:#f1f3f5; color:#888; border-color:#eceef0; }
+
+        @media (max-width:480px){
+            .card-body { padding:14px; }
+            .avatar, .avatar-placeholder { width:80px; height:80px; margin-top:-40px; }
+            .profile-name { font-size:18px; }
         }
     </style>
 </head>
