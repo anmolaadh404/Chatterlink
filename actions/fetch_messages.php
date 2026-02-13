@@ -1,4 +1,13 @@
-<?php
+# Navigate to your project
+cd /home/anmol/Desktop/Codes/Chatterlink
+
+# Remove the duplicate root-level directories (keeping Chatterlink/ subdirectory)
+rm -rf auth actions config pages
+rm -f index.php test_db.php users.php
+
+# Verify the cleaned structure
+ls -la
+ls -la Chatterlink/<?php
 session_start();
 
 if (!isset($_SESSION['user_id'])) {

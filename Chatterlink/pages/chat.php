@@ -34,102 +34,231 @@ if (!$r) {
     <title>Chat with <?php echo htmlspecialchars($r['name']); ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
-        * { box-sizing: border-box; }
-        body, html { height: 100%; margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f2f5; }
-        
+        :root {
+            --bg-dark: #0a0e27;
+            --bg-secondary: #1a1f3a;
+            --bg-tertiary: #252d47;
+            --accent-cyan: #00d4ff;
+            --accent-purple: #7c3aed;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b8d4;
+            --border-color: #2d3548;
+        }
+
+        * { 
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body, html { 
+            height: 100%;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+        }
+
         .chat-container {
             display: flex;
             flex-direction: column;
             height: 100vh;
-            max-width: 800px;
-            margin: 0 auto;
-            background: #fff;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            background: var(--bg-dark);
         }
 
         .header {
-            padding: 15px 20px;
-            background: #fff;
-            border-bottom: 1px solid #ddd;
+            padding: 1.25rem 1.5rem;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
             display: flex;
             align-items: center;
-            gap: 15px;
-            font-weight: bold;
+            gap: 1rem;
+            font-weight: 600;
         }
 
         .header a {
             text-decoration: none;
-            font-size: 24px;
-            color: #3797f0;
+            font-size: 1.5rem;
+            color: var(--accent-cyan);
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+        }
+
+        .header a:hover {
+            color: var(--accent-purple);
+        }
+
+        .header-title {
+            flex: 1;
+            font-size: 1.1rem;
+            color: var(--text-primary);
         }
 
         .messages {
             flex: 1;
             overflow-y: auto;
-            padding: 20px;
+            padding: 1.5rem;
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            background-color: #f9f9f9;
+            gap: 1rem;
+            background: var(--bg-dark);
         }
 
-        /* Message Bubbles Styles */
-        .msg-row { display: flex; width: 100%; margin-bottom: 4px; }
-        .me-row { justify-content: flex-end; }
-        .them-row { justify-content: flex-start; }
+        .msg-row {
+            display: flex;
+            width: 100%;
+            margin-bottom: 0.5rem;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .me-row {
+            justify-content: flex-end;
+        }
+
+        .them-row {
+            justify-content: flex-start;
+        }
 
         .msg {
-            max-width: 75%;
-            padding: 10px 15px;
-            border-radius: 18px;
-            font-size: 14px;
-            position: relative;
-            line-height: 1.4;
+            max-width: 70%;
+            padding: 0.875rem 1.25rem;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            word-break: break-word;
         }
 
-        .me { background: #3797f0; color: #fff; border-bottom-right-radius: 4px; }
-        .them { background: #e4e6eb; color: #000; border-bottom-left-radius: 4px; }
+        .me {
+            background: linear-gradient(135deg, var(--accent-cyan), #00a8cc);
+            color: var(--bg-dark);
+            border-bottom-right-radius: 4px;
+            font-weight: 500;
+        }
+
+        .them {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border-bottom-left-radius: 4px;
+        }
+
+        .msg img {
+            max-width: 100%;
+            border-radius: 8px;
+            margin-top: 0.5rem;
+        }
 
         .input-area {
-            padding: 15px;
-            background: #fff;
-            border-top: 1px solid #ddd;
+            padding: 1.25rem 1.5rem;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
             display: flex;
-            gap: 10px;
+            gap: 0.75rem;
+            align-items: flex-end;
+        }
+
+        .input-group {
+            flex: 1;
+            display: flex;
+            gap: 0.5rem;
+            align-items: flex-end;
         }
 
         .input-area input {
             flex: 1;
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-            border-radius: 25px;
+            padding: 0.875rem 1rem;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-primary);
             outline: none;
-            background: #f0f2f5;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .input-area input:focus {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 10px rgba(0, 212, 255, 0.2);
+        }
+
+        .input-area input::placeholder {
+            color: var(--text-secondary);
         }
 
         .input-area button {
-            background: #3797f0;
-            color: white;
+            background: linear-gradient(135deg, var(--accent-cyan), #00a8cc);
+            color: var(--bg-dark);
             border: none;
-            padding: 0 20px;
-            border-radius: 25px;
-            font-weight: bold;
+            padding: 0.875rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 600;
             cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
         }
 
-        .input-area button:hover { background: #287dc5; }
-        
-        /* Message Actions */
-        .actions { font-size: 10px; margin-top: 5px; opacity: 0.7; }
-        .me .actions { color: #e1e1e1; text-align: right; }
+        .input-area button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 212, 255, 0.3);
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-cyan);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-purple);
+        }
+
+        @media (max-width: 768px) {
+            .msg {
+                max-width: 85%;
+            }
+
+            .header {
+                padding: 1rem;
+            }
+
+            .messages {
+                padding: 1rem;
+            }
+
+            .input-area {
+                padding: 1rem;
+            }
+        }
     </style>
 </head>
 <body>
 
 <div class="chat-container">
     <div class="header">
-        <a href="/Chatterlink/users.php">←</a>
-        <span><?php echo htmlspecialchars($r['name']); ?></span>
+        <a href="/Chatterlink/Chatterlink/users.php">←</a>
+        <div class="header-title"><?php echo htmlspecialchars($r['name']); ?></div>
     </div>
 
     <div class="messages" id="chatBox">
@@ -137,8 +266,10 @@ if (!$r) {
     </div>
 
     <form class="input-area" id="chatForm">
-        <input type="text" id="msgInput" autocomplete="off" placeholder="Type a message...">
-        <button type="submit">Send</button>
+        <div class="input-group">
+            <input type="text" id="msgInput" autocomplete="off" placeholder="Type a message...">
+            <button type="submit">Send</button>
+        </div>
     </form>
 </div>
 
@@ -155,7 +286,6 @@ function loadChat(){
     .then(d => {
         if(d !== lastData){
             chatBox.innerHTML = d;
-            // Scroll to bottom only if content changed
             chatBox.scrollTop = chatBox.scrollHeight;
             lastData = d;
         }
@@ -179,16 +309,10 @@ function sendMsg(e){
     });
 }
 
-// Event Listeners
 chatForm.addEventListener('submit', sendMsg);
-
-// Auto-refresh chat every 2 seconds
 setInterval(loadChat, 2000);
-
-// Initial load
 loadChat();
 
-// Global functions for message management (called from HTML returned by fetch_messages.php)
 window.editMessage = function(id) {
     let newMsg = prompt("Edit your message:");
     if (!newMsg || newMsg.trim() === "") return;
