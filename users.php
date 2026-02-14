@@ -81,14 +81,14 @@ $result = $stmt->get_result();
 
 body {
     margin: 0;
-    background: #111;
-    color: #e0e0e0;
+    background: #f5f7fa;
+    color: #2d3436;
 }
 
 .header {
     padding: 16px 24px;
-    background: #2d2d2d;
-    border-bottom: 1px solid #404040;
+    background: white;
+    border-bottom: 1px solid #e1e8ed;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -98,7 +98,7 @@ body {
 .header-title {
     font-weight: 700;
     font-size: 18px;
-    color: #ffffff;
+    color: #1a1a1a;
 }
 
 .header-right {
@@ -120,8 +120,8 @@ body {
 
 .search-box {
     padding: 20px 24px;
-    background: #2d2d2d;
-    border-bottom: 1px solid #404040;
+    background: white;
+    border-bottom: 1px solid #e1e8ed;
 }
 
 .search-box form {
@@ -136,7 +136,7 @@ body {
     border: 1.5px solid #dfe6e9;
     border-radius: 10px;
     background: #f8f9fa;
-    color: #e0e0e0;
+    color: #2d3436;
     outline: none;
     font-size: 14px;
     transition: all 0.3s ease;
@@ -144,8 +144,8 @@ body {
 
 .search-box input:focus {
     border-color: #5865F2;
-    background: #2d2d2d;
-    box-shadow: 0 0 0 3px rgba(9, 132, 227, 0.1);
+    background: white;
+    box-shadow: 0 0 0 3px rgba(88, 101, 242, 0.1);
 }
 
 .search-box button {
@@ -163,7 +163,7 @@ body {
 .search-box button:hover {
     background: #4752C4;
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(9, 132, 227, 0.3);
+    box-shadow: 0 4px 12px rgba(88, 101, 242, 0.3);
 }
 
 .users-section {
@@ -175,7 +175,7 @@ body {
 .section-title {
     font-weight: 700;
     padding: 16px 0 12px 0;
-    color: #e0e0e0;
+    color: #2d3436;
     font-size: 13px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -185,12 +185,12 @@ body {
 .user {
     padding: 16px;
     margin-bottom: 10px;
-    background: #2d2d2d;
+    background: white;
     border-radius: 12px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border: 1px solid #404040;
+    border: 1px solid #e1e8ed;
     transition: all 0.3s ease;
 }
 
@@ -206,7 +206,7 @@ body {
 
 .user-name {
     font-weight: 600;
-    color: #ffffff;
+    color: #1a1a1a;
     text-decoration: none;
     display: block;
     margin-bottom: 4px;
@@ -215,7 +215,7 @@ body {
 }
 
 .user-name:hover {
-    color: #5865F2;
+    color: #aaadd1ff;
 }
 
 .user-username {
@@ -226,7 +226,7 @@ body {
 
 .user-bio {
     font-size: 13px;
-    color: #636e72;
+    color: #252829ff;
     margin-top: 4px;
     line-height: 1.4;
 }
@@ -258,11 +258,11 @@ body {
 .btn-chat:hover {
     background: #4752C4;
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(9, 132, 227, 0.3);
+    box-shadow: 0 4px 12px rgba(88, 101, 242, 0.3);
 }
 
 .btn-friend {
-    background: #404040;
+    background: #e1e8ed;
     color: #636e72;
 }
 

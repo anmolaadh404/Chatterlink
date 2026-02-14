@@ -75,7 +75,7 @@ if (!$r) {
 
         .header {
             padding: 12px 16px;
-            background: #2d2d2d;
+            background: #3d3838a4;
             border-bottom: 1px solid #404040;
             display: flex;
             align-items: center;
@@ -103,12 +103,12 @@ if (!$r) {
         .header-name {
             font-weight: 700;
             font-size: 16px;
-            color: #e0e0e0;
+            color: #fdf7f7ff;
         }
         
         .header-username {
             font-size: 13px;
-            color: #636e72;
+            color: #0f0e0eff;
             font-weight: 400;
             margin-top: 2px;
         }
@@ -199,18 +199,17 @@ if (!$r) {
         .msg img {
             max-width: 100%;
             max-height: 300px;
-            border-radius: 8px;
-            margin-bottom: 8px;
+           
         }
 
         .me { 
-            background: linear-gradient(135deg, #a2b0bbff 0%, #727e88ff 100%);
+            background: linear-gradient(135deg, #4f455393 0%, #141313ff 100%);
             color: white;
         }
         
         .them { 
-            background: #cee8f8ff;
-            color: #e0e0e0;
+            background: #a77d23ff;
+            color: #0a0808ff;
         }
         
         /* Mobile responsiveness */
@@ -416,7 +415,7 @@ if (!$r) {
         }
         
         .input-area input[type="text"]:focus {
-            border-color: #5865F2;
+            border-color: #c9cbdfff;
             background: #2d2d2d;
             box-shadow: 0 0 0 3px rgba(9, 132, 227, 0.1);
         }
@@ -441,7 +440,7 @@ if (!$r) {
 
         .input-area button:hover { 
             transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(9, 132, 227, 0.3);
+            box-shadow: 0 6px 16px rgba(129, 198, 250, 0.3);
         }
 
         .input-area button:active {
@@ -488,7 +487,7 @@ if (!$r) {
         }
         
         .me .actions span:hover {
-            background: rgba(255, 255, 255, 0.5);
+            background: rgba(219, 219, 219, 0.5);
         }
         
         /* Mobile responsiveness */
@@ -688,15 +687,19 @@ function loadChat(){
     .catch(err => console.error("Error fetching messages:", err));
 }
 
-function sendMsg(e){
+
+    function sendMsg(e){
     if(e) e.preventDefault();
     
     let m = msgInput.value.trim();
     let photoFile = document.getElementById('photoInput').files[0];
 
+    // REMOVED THE CHECK - Allow photo-only messages
+    // if(!m && !photoFile) return;
+
+    // Allow photo without text OR text without photo OR both
     if(!m && !photoFile) {
-        alert('Please enter a message or select a photo');
-        return;
+        return; // Only return if BOTH are empty
     }
 
     // Disable send button to prevent double-sending
@@ -708,7 +711,10 @@ function sendMsg(e){
         let formData = new FormData();
         formData.append('receiver_id', receiverId);
         formData.append('photo', photoFile);
-        if(m) formData.append('message', m);
+        // Only add message if it exists
+        if(m) {
+            formData.append('message', m);
+        }
 
         fetch("../actions/send_message.php", {
             method: "POST",
@@ -737,7 +743,7 @@ function sendMsg(e){
             if(sendBtn) sendBtn.disabled = false;
         });
     } else {
-        // Send text-only message
+        // Send text-only message (no photo)
         fetch("../actions/send_message.php", {
             method: "POST",
             headers: {"Content-Type": "application/x-www-form-urlencoded"},
@@ -788,21 +794,50 @@ window.editMessage = function(id) {
     });
 };
 
+window.editMessage = function(id) {
+    let newMsg = prompt("Edit your message:");
+    if (!newMsg || newMsg.trim() === "") return;
+
+    fetch("../actions/edit_message.php", {
+        method: "POST",
+        headers: {"Content-Type": "application/x-www-form-urlencoded"},
+        body: `message_id=${id}&new_message=${encodeURIComponent(newMsg.trim())}`
+    })
+    .then(r => r.json())
+    .then(d => {
+        if (d.success) {
+            loadChat();
+        } else {
+            alert(d.error || 'Error editing message');
+        }
+    })
+    .catch(err => {
+        console.error('Error:', err);
+        alert('Failed to edit message');
+    });
+}
+
 window.deleteMessage = function(id) {
-    if (!confirm("Are you sure you want to delete this message?")) return;
+    if (!confirm('Delete this message?')) return;
 
     fetch("../actions/delete_message.php", {
         method: "POST",
         headers: {"Content-Type": "application/x-www-form-urlencoded"},
-        body: `id=${id}`
-    }).then(r => r.json()).then(d => {
+        body: `message_id=${id}`
+    })
+    .then(r => r.json())
+    .then(d => {
         if (d.success) {
             loadChat();
         } else {
             alert(d.error || 'Error deleting message');
         }
+    })
+    .catch(err => {
+        console.error('Error:', err);
+        alert('Failed to delete message');
     });
-};
+}
 </script>
 
 </body>

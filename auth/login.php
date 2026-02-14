@@ -49,7 +49,6 @@ body {
     align-items: center;
     color: #e0e0e0;
 }
-
 .auth-box {
     width: 100%;
     max-width: 420px;
@@ -58,6 +57,7 @@ body {
     border-radius: 16px;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
 }
+
 
 .logo {
     width: 56px;
@@ -75,12 +75,12 @@ body {
     font-size: 28px;
     font-weight: 700;
     margin-bottom: 8px;
-    color: #ffffff;
+    color: #c7c7c7ff;
 }
 
 .subtitle {
     font-size: 15px;
-    color: #636e72;
+    color: #969b9cff;
     margin-bottom: 32px;
     font-weight: 400;
 }
@@ -92,7 +92,7 @@ input {
     border-radius: 10px;
     border: 1.5px solid #dfe6e9;
     background: #f8f9fa;
-    color: #e0e0e0;
+    color: #2d3436;
     outline: none;
     font-size: 15px;
     transition: all 0.3s ease;
@@ -100,8 +100,8 @@ input {
 
 input:focus {
     border-color: #5865F2;
-    background: #2d2d2d;
-    box-shadow: 0 0 0 3px rgba(9, 132, 227, 0.1);
+    background: white;
+    box-shadow: 0 0 0 3px rgba(88, 101, 242, 0.1);
 }
 
 input::placeholder {
@@ -124,7 +124,7 @@ button {
 
 button:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(9, 132, 227, 0.4);
+    box-shadow: 0 6px 20px rgba(88, 101, 242, 0.4);
 }
 
 button:active {
